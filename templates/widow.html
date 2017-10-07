@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Rook</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="{{url_for('static', filename='scripts/widowscript.js')}}"></script>
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    </head>
+    <body> 
+        <div id="wrapper">
+            <h1>Player {{player + 1}}</h1>
+            <div id="hand">
+                {% for i in game["players"][player - 1]["hand"]["cards"]: %}
+                    {% if i["value"] == 20 %}
+                    <div class="cardRook card">
+                            <p class="cardtl">{{i.value}}</p>
+                            <img src="{{url_for('static', filename='images/rookcard.png')}}">
+                            <p class="cardbr">{{i.value}}</p>
+                    </div>
+                    {% else %}
+                    <div class="card{{i["color"]}} card">
+                        <p class="cardtl">{{i.value}}</p>
+                        <p class="cardm">{{i.value}}</p>
+                        <p class="cardbr">{{i.value}}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div id="widow">
+                {% for i in game["widow"]["cards"]: %}
+                    {% if i["value"] == 20 %}
+                    <div class="cardRook card">
+                            <p class="cardtl">{{i.value}}</p>
+                            <img src="{{url_for('static', filename='images/rookcard.png')}}">
+                            <p class="cardbr">{{i.value}}</p>
+                    </div>
+                    {% else %}
+                    <div class="card{{i["color"]}} card">
+                        <p class="cardtl">{{i.value}}</p>
+                        <p class="cardm">{{i.value}}</p>
+                        <p class="cardbr">{{i.value}}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                <form id="widowform" action="/game/widow" method="post">
+                    <fieldset id="cardlist">
+                        
+                    </fieldset>
+                    Trump:
+                    <select name="trump">
+                        <option value="Green">Green</option>
+                        <option value="Black">Black</option>
+                        <option value="Red">Red</option>
+                        <option value="Yellow">Yellow</option>
+                    </select>
+                    <input type="submit" value="Okay">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

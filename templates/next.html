@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Rook</title>
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    </head>
+    <body> 
+        <div id="wrapper">
+            <h1>Please pass the game to Player {{player + 1}}</h1>
+            <form action="/game/play">
+                <input type="submit" value="Okay">
+            </form>
+        </div>
+    </body>
+</html>

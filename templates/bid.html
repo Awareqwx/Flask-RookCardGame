@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Rook</title>
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    </head>
+    <body> 
+        <div id="wrapper">
+            <h1>Player {{player + 1}}</h1>
+            <div id="hand">
+                {% for i in game["players"][player - 1]["hand"]["cards"]: %}
+                    {% if i["value"] == 20 %}
+                    <div class="cardRook">
+                            <p class="cardtl">{{i.value}}</p>
+                            <img src="{{url_for('static', filename='images/rookcard.png')}}">
+                            <p class="cardbr">{{i.value}}</p>
+                    </div>
+                    {% else %}
+                    <div class="card{{i["color"]}}">
+                        <p class="cardtl">{{i.value}}</p>
+                        <p class="cardm">{{i.value}}</p>
+                        <p class="cardbr">{{i.value}}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div id="bidbox">
+                {% if bid == 25 %}
+                <h4>Current Bid: None</h4>
+                {% else %}
+                <h4>Current Bid: {{bid}}</h4>
+                {% endif %}
+                <p>Bid "0" to pass</p>
+                {% if bad %}
+                <h4 style="color: red;"> Please enter a valid bid </h4>
+                <h4>Valid bids are multiples of 5 and larger than the current bid.</h4>
+                <h4>The minimum bid is 30</h4>
+                {% endif %}
+                <form action="/game/bid" method="post">
+                    Bid:<input type="text" name="bidbox">
+                    <input type="submit" value="Bid">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

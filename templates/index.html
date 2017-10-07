@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Rook</title>
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    </head>
+    <body> 
+        <div id="wrapper">
+            <img id="splash" src="{{url_for('static', filename='images/rook.png')}}", alt="Rook">
+            <form class="menbutton" action="/newgame">
+                <input type="submit" value="New Game">
+            </form>
+            <form class="menbutton" action="/continue">
+                <input type="submit" value="Continue">
+            </form>
+        </div>
+    </body>
+</html>
