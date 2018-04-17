@@ -14,13 +14,13 @@
             <div id="hand">
                 {% for i in game["players"][player - 1]["hand"]["cards"]: %}
                     {% if i["value"] == 20 %}
-                    <div class="cardRook card">
+                    <div class="cardRook card" id="hand{{loop.index}}">
                             <p class="cardtl">{{i.value}}</p>
                             <img src="{{url_for('static', filename='images/rookcard.png')}}">
                             <p class="cardbr">{{i.value}}</p>
                     </div>
                     {% else %}
-                    <div class="card{{i["color"]}} card">
+                    <div class="card{{i["color"]}} card" id="hand{{loop.index}}">
                         <p class="cardtl">{{i.value}}</p>
                         <p class="cardm">{{i.value}}</p>
                         <p class="cardbr">{{i.value}}</p>

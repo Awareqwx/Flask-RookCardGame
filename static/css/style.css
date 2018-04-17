@@ -30,7 +30,7 @@ h1{
     background-color: white;
 }
 
-#widow, #played{
+#widow, #played, #messages{
     border: 3px inset gray;
     background-color: lightgray;
 }

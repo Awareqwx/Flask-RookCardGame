@@ -95,6 +95,9 @@ class Player(object):
         self.team = team
         self.passed = False
     
+    def addTrick(self, trick):
+        self.tricks.append(trick)
+
     def getDict(self):
         trickList = []
         for i in self.tricks:
@@ -107,6 +110,7 @@ def deal(deck):
     while len(dealt[4].cards) < 5:
         dealt[count % 5].addCard(deck.cards.pop())
         count += 1
+    count = 0
     while len(deck.cards) > 0:
         dealt[count % 4].addCard(deck.cards.pop())
         count += 1
@@ -115,6 +119,7 @@ def deal(deck):
 class Game(object):
     def __init__(self):
         self.players = []
+        self.points = [0, 0]
         self.trump = "None"
         self.widow = Trick([])
         self.inPlay = Trick([])
@@ -127,12 +132,26 @@ class Game(object):
         for i in range(0, 4):
             self.players.append(Player(self.hands[i], (i % 2) + 1))
         self.widow = Trick(self.hands[4].cards)
+        for i in range(0, 2):
+            self.points[i] = 0
+
+    def newHand(self):
+        self.deck = Deck()
+        self.hands = deal(self.deck)
+        for i in self.hands:
+            i.sort()
+        for i in range(0, 4):
+            self.players[i].hand = self.hands[i]
+            self.players[i].passed = False
+            self.players[i].tricks = []
+        self.widow = Trick(self.hands[4].cards)
+
     
     def getDict(self):
         playerList = []
         for i in self.players:
             playerList.append(i.getDict())
-        return {"players":playerList,"trump":self.trump,"widow":self.widow.getDict(),"inPlay":self.inPlay.getDict()}
+        return {"players":playerList,"trump":self.trump,"widow":self.widow.getDict(),"inPlay":self.inPlay.getDict(),"points":self.points}
     
 def parseCard(d):
     return Card(d["color"], d["value"])
@@ -167,4 +186,5 @@ def parseGame(d):
     g.widow = parseTrick(d["widow"])
     g.trump = d["trump"]
     g.inPlay = parseTrick(d["inPlay"])
+    g.points = d["points"]
     return g

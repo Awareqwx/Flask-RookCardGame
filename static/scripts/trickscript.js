@@ -1,7 +1,7 @@
 $(document).ready(function(){
     followCards();
     text = "";
-    $("#played").each(function(i){
+    $("#played .card").each(function(i){
         text += "<input type='hidden' name='card' value='" + i + "'>"
     });
     $("#cardlist").html(text)
@@ -11,19 +11,17 @@ $(document).ready(function(){
         $(this).css("border-color", "black");
     });
     $("#hand .follow").click(function(){
-        $(this).data("selected", true);
-        $(".card").each(function(i){
-            if($(this).data("selected"))
-            {
-                $("#selectedCard").html("<input type='hidden' name='card' value='" + i + "'>")
-            }
-        });
+        let cardNum = $(this).attr('id');
+        console.log(cardNum, cardNum.substr(4));
+        $("#selectedCard").html("<input type='hidden' name='cardPlayed' value='" + cardNum.substr(4) + "'>");
+        console.log($('#trickform').serialize())
         $.ajax({
             url: '/game/trick',
             data: $('#trickform').serialize(),
             type: 'POST',
-            success: function(){
-                location.href="/game/next"
+            success: function(res){
+                console.log(res["url"]);
+                location.href=res["url"];
             }
         });
     });
@@ -39,19 +37,34 @@ function followCards()
     }
     else
     {
+        let hasRook = false;
         $("#hand .card").each(function(i){
-
-            if($(this).hasClass($("#follow").val()))
+            if($(this).hasClass($("#follow").val()) || $(this).hasClass("cardRook"))
             {
                 $(this).addClass("follow")
+                console.log("Hello")
+                if($(this).hasClass("cardRook"))
+                {
+                    hasRook = true;
+                }
             }
             else
             {
                 $(this).css("border-color", "red")
+                console.log("World")
             }
         });
-        if($(".follow").length === 0)
+        if($(".follow").length === 0 && !hasRook)
         {
+            console.log("Foo")
+            $("#hand .card").each(function(){
+                $(this).addClass("follow")
+                $(this).css("border-color", "black")
+            })
+        }
+        else if($(".follow").length == 1 && hasRook)
+        {
+            console.log("Bar")
             $("#hand .card").each(function(){
                 $(this).addClass("follow")
                 $(this).css("border-color", "black")

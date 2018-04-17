@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Rook</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet", type="text/css", href="{{url_for('static', filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    </head>
+    <body> 
+        <div id="wrapper">
+            <h1>Hand Over</h1>
+            <div id="messages">
+                {% for m in messages %}
+                    <p class="message">{{m}}</p>
+                {% endfor %}
+            </div>
+            <form action="/game/newHand" method="get">
+                <input type="submit" value="New Hand">
+            </form>
+            <form action="/" method="get">
+                <input type="submit" value="Main Menu">
+            </form>
+        </div>
+    </body>
+</html>
