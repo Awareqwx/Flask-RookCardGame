@@ -9,7 +9,14 @@
     </head>
     <body> 
         <div id="wrapper">
-            <h1>Hand Over</h1>
+            <div id="header">
+                <div id="sidebar">
+                    <h4>Score - Odd: {{game["points"][1]}} | Even: {{game["points"][0]}}</h4>
+                    <h4>Bid - {{game["bid"]}} | Player {{game["bidWinner"] + 1}}</h4>
+                    <h4>Trump - {{game["trump"]}}</h4>
+                </div>
+                <h1>Hand Over</h1>
+            </div>
             <div id="messages">
                 {% for m in messages %}
                     <p class="message">{{m}}</p>

@@ -24,7 +24,8 @@ def nextPlayer():
             if not i["passed"]:
                 p += 1
         if p == 1:
-            flask.session["game"]["players"][flask.session["player"]]["bid"] = flask.session["bid"] if flask.session["bid"] != 25 else 0
+            flask.session["game"]["bidWinner"] = flask.session["player"]
+            flask.session["game"]["bid"] = flask.session["bid"] if flask.session["bid"] != 25 else 0
             flask.session["state"] = "widow"
             flask.session["widow"] = "false"
 
@@ -82,7 +83,7 @@ def start():
     flask.session["player"] = flask.session["bidStart"]
     flask.session["bid"] = 25
     #DEBUG CODE END
-    return flask.redirect("/game/play")
+    return flask.redirect("/game/next")
 
 @app.route("/game/play")
 def play():
@@ -202,13 +203,14 @@ def trickDone():
                 value = cards[i].value
                 index = i
                 trumped = 2 if cards[i].color != "Blue" else 3
+                print color, cards[i].color
             else:
                 if color == cards[i].color and value < cards[i].value:
                     color = cards[i].color
                     value = cards[i].value
                     index = i
         else:
-            if (color == cards[i].color and value < cards[i].value) or color == "Blue":
+            if (color == cards[i].color and value < cards[i].value) or cards[i].color == "Blue":
                 color = cards[i].color
                 value = cards[i].value
                 index = i
@@ -216,6 +218,7 @@ def trickDone():
     trick = rook.Trick(cards)                             #if the current player is player 4 (index 3), the index of the winner should wrap
     game.players[winner].addTrick(trick)                  #around to 0. Likewise, if the 3rd player won (index 2) and the current player is 3
                                                           #(index 2), it should wrap around to player 2 (index 1).
+    messages.append("Player " + str(((flask.session["player"] + 1) % 4) + 1) + " went first")                
     flask.session["player"] = winner #In Rook, the winner of the trick goes first on the next one
     game.inPlay = rook.Trick([])
     messages.append("Player " + str(winner + 1) + " won the trick.")
@@ -238,6 +241,8 @@ def nextTrick():
     if len(game.players[0].hand.cards) == 0:
         game.players[flask.session["player"]].addTrick(game.widow)
         game.widow = rook.Trick([])
+
+        flask.session["game"] = game.getDict()
         return flask.redirect("game/endHand")
     else:
         return flask.redirect("game/next")
@@ -254,22 +259,16 @@ def endHand():
 
     oddPoints = 0
     evenPoints = 0
-    oddBid = False
-    bid = 0
+    oddBid = game.bidWinner % 2 == 0
+    bid = game.bid
     for i in range(0, 4):
         if(i % 2 == 0):
-            if game.players[i].bid != 0:
-                oddBid = True
-                bid = game.players[i].bid
             for t in game.players[i].tricks:
                 oddPoints += t.points
         else:
-            if game.players[i].bid != 0:
-                oddBid = False
-                bid = game.players[i].bid
             for t in game.players[i].tricks:
                 evenPoints += t.points
-    messages.append("Score: Even - " + str(evenPoints) + " | Odd - " + str(oddPoints))
+    messages.append("Score: Odd - " + str(oddPoints) + " | Even - " + str(evenPoints))
     if oddBid:
         if not reshow:    
             game.points[0] += evenPoints
@@ -295,7 +294,7 @@ def endHand():
             messages.append("Even team did not make their bid")
             if not reshow:    
                 game.points[0] -= bid
-    messages.append("Point Tally: Even - " + str(game.points[0]) + " | Odd - " + str(game.points[1]))
+    messages.append("Point Tally: Odd - " + str(game.points[1]) + " | Even - " + str(game.points[0]))
     
     flask.session["game"] = game.getDict()
     return flask.render_template("endHand.html", game=flask.session["game"], player=flask.session["player"], messages=messages)
@@ -307,6 +306,7 @@ def newHand():
     game = rook.parseGame(flask.session["game"])
 
     game.newHand()
+    flask.session["bidStart"] = (flask.session["bidStart"] + 1) % 4
 
     flask.session["game"] = game.getDict()
 

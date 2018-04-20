@@ -10,7 +10,14 @@
     </head>
     <body> 
         <div id="wrapper">
-            <h1>Player {{player + 1}}</h1>
+            <div id="header">
+                <div id="sidebar">
+                    <h4>Score - Odd: {{game["points"][1]}} | Even: {{game["points"][0]}}</h4>
+                    <h4>Bid - {{game["bid"]}} | Player {{game["bidWinner"] + 1}}</h4>
+                    <h4>Trump - {{game["trump"]}}</h4>
+                </div>
+                <h1>Player {{player + 1}}</h1>
+            </div>
             <div id="hand">
                 {% for i in game["players"][player - 1]["hand"]["cards"]: %}
                     {% if i["value"] == 20 %}
@@ -44,15 +51,15 @@
                     </div>
                     {% endif %}
                 {% endfor %}
-                <form id="trickform" action="/game/widow" method="post">
-                    <fieldset id="cardlist">
-                        
-                    </fieldset> 
-                    <fieldset id="selectedCard">
-                        
-                    </fieldset>
-                </form>
             </div>
+            <form id="trickform" action="/game/widow" method="post">
+                <fieldset id="cardlist">
+                    
+                </fieldset> 
+                <fieldset id="selectedCard">
+                    
+                </fieldset>
+            </form>
         </div>
         <input type="hidden" id="follow" value={{"card" + follow}}>
     </body>

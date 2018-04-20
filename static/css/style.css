@@ -18,11 +18,31 @@ html{
     margin: 5px 0;
 }
 
+#header{
+    text-align: center;
+    position: relative;
+}
+
+#sidebar{
+    position: absolute;
+    padding: 2px;
+    left: 0px;
+    border: 3px inset gray;
+    background-color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#sidebar h4{
+    margin: 2px;
+}
+
 h1{
     border: 3px inset gray;
     background-color: white;
     display: inline-block;
     padding: 5px;
+    clear: both;
 }
 
 #hand{
@@ -103,4 +123,8 @@ h1{
 
 #cardlist{
     border: 0px solid lightgray;
+}
+
+fieldset{
+    border: none;
 }

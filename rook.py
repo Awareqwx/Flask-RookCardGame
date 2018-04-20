@@ -90,7 +90,6 @@ class Trick(object):
 class Player(object):
     def __init__(self, hand, team):
         self.hand = hand
-        self.bid = 0
         self.tricks = []
         self.team = team
         self.passed = False
@@ -102,7 +101,7 @@ class Player(object):
         trickList = []
         for i in self.tricks:
             trickList.append(i.getDict())
-        return {"hand":self.hand.getDict(),"bid":self.bid,"tricks":trickList,"team":self.team,"passed":self.passed}
+        return {"hand":self.hand.getDict(),"tricks":trickList,"team":self.team,"passed":self.passed}
         
 def deal(deck):
     dealt = [Hand(), Hand(), Hand(), Hand(), Hand()]
@@ -123,6 +122,8 @@ class Game(object):
         self.trump = "None"
         self.widow = Trick([])
         self.inPlay = Trick([])
+        self.bid = 0
+        self.bidWinner = -1
     
     def setupGame(self):
         self.deck = Deck()
@@ -134,6 +135,8 @@ class Game(object):
         self.widow = Trick(self.hands[4].cards)
         for i in range(0, 2):
             self.points[i] = 0
+        self.bid = 0
+        self.bidWinner = -1
 
     def newHand(self):
         self.deck = Deck()
@@ -145,13 +148,15 @@ class Game(object):
             self.players[i].passed = False
             self.players[i].tricks = []
         self.widow = Trick(self.hands[4].cards)
+        self.bid = 0
+        self.bidWinner = -1
 
     
     def getDict(self):
         playerList = []
         for i in self.players:
             playerList.append(i.getDict())
-        return {"players":playerList,"trump":self.trump,"widow":self.widow.getDict(),"inPlay":self.inPlay.getDict(),"points":self.points}
+        return {"players":playerList,"trump":self.trump,"widow":self.widow.getDict(),"inPlay":self.inPlay.getDict(),"points":self.points,"bid":self.bid,"bidWinner":self.bidWinner}
     
 def parseCard(d):
     return Card(d["color"], d["value"])
@@ -173,7 +178,6 @@ def parsePlayer(d):
     for i in d["tricks"]:
         trickList.append(parseTrick(i))
     p = Player(h, d["team"])
-    p.bid = d["bid"]
     p.passed = d["passed"]
     p.tricks = trickList
     return p
@@ -187,4 +191,6 @@ def parseGame(d):
     g.trump = d["trump"]
     g.inPlay = parseTrick(d["inPlay"])
     g.points = d["points"]
+    g.bid = d["bid"]
+    g.bidWinner = d["bidWinner"]
     return g
