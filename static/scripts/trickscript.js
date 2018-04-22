@@ -62,7 +62,7 @@ function followCards()
                 $(this).css("border-color", "black")
             })
         }
-        else if($(".follow").length == 1 && hasRook)
+        else if($(".follow").length == 1 && hasRook && $("#follow").val() != $("#trump").val())
         {
             console.log("Bar")
             $("#hand .card").each(function(){

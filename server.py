@@ -214,6 +214,8 @@ def trickDone():
                 color = cards[i].color
                 value = cards[i].value
                 index = i
+                if cards[i].color == "Blue":
+                    trumped = 3
     winner = (flask.session["player"] + index + 1) % 4    #The index will be 0 if the first person to play a card won the trick, so
     trick = rook.Trick(cards)                             #if the current player is player 4 (index 3), the index of the winner should wrap
     game.players[winner].addTrick(trick)                  #around to 0. Likewise, if the 3rd player won (index 2) and the current player is 3
