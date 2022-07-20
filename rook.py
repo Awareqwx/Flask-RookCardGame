@@ -16,9 +16,9 @@ class Card(object):
             return 0
     def showCard(self):
         if self.value == 20:
-            print "The Rook"
+            print("The Rook")
         else:
-            print self.color, self.value
+            print(self.color, self.value)
 
     def getDict(self):
         return {"color":self.color,"value":self.value}

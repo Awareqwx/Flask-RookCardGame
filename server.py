@@ -104,7 +104,7 @@ def play():
 @app.route("/game/bid", methods=["POST"])
 def bid():
     if(not isInt(flask.request.form["bidbox"])):
-        print "Hello"
+        print("Hello")
         flask.session["badbid"]=True
         return flask.redirect("/game/next")
     bid = int(flask.request.form["bidbox"])
@@ -113,7 +113,7 @@ def bid():
         nextPlayer()
         return flask.redirect("/game/next")
     elif bid <= flask.session["bid"] or bid % 5 != 0:
-        print "World"
+        print("World")
         flask.session["badbid"]=True
         return flask.redirect("/game/play")
     flask.session["bid"] = bid
@@ -139,9 +139,9 @@ def widow():
     newWidow = rook.Trick([])
     j = 0
     for i in range(0, len(cards)):
-        print i, j, selectedCards[j], len(selectedCards)
+        print(i, j, selectedCards[j], len(selectedCards))
         if i == selectedCards[j]:
-            print "Hello"
+            print("Hello")
             newWidow.addCard(cards[i])
             j += 1
             if j >= len(selectedCards):
@@ -159,9 +159,9 @@ def widow():
 @app.route("/game/trick", methods=["POST"])
 def trick():
     selected = int(flask.request.form["cardPlayed"]) - 1
-    print selected
+    print(selected)
     game = rook.parseGame(flask.session["game"])
-    print flask.session["player"]
+    print(flask.session["player"])
     game.inPlay.addCard(game.players[flask.session["player"] - 1].hand.playCard(selected))
     if len(game.inPlay.cards) == 1:
         if game.inPlay.cards[0].color == "Blue":
@@ -170,10 +170,10 @@ def trick():
             flask.session["follow"] = game.inPlay.cards[0].color
     flask.session["game"] = game.getDict()
     if len(game.inPlay.cards) == 4:
-        print "Hello, World!"
+        print("Hello, World!")
         return flask.jsonify({"url":"/game/trickDone"})
     nextPlayer()
-    print "Goodbye, World!"
+    print("Goodbye, World!")
     return flask.jsonify({"url":"/game/next"})
 
 @app.route("/game/trickDone")
@@ -203,7 +203,7 @@ def trickDone():
                 value = cards[i].value
                 index = i
                 trumped = 2 if cards[i].color != "Blue" else 3
-                print color, cards[i].color
+                print(color, cards[i].color)
             else:
                 if color == cards[i].color and value < cards[i].value:
                     color = cards[i].color
@@ -245,9 +245,9 @@ def nextTrick():
         game.widow = rook.Trick([])
 
         flask.session["game"] = game.getDict()
-        return flask.redirect("game/endHand")
+        return flask.redirect("/game/endHand")
     else:
-        return flask.redirect("game/next")
+        return flask.redirect("/game/next")
 
 @app.route("/game/endHand")
 def endHand():
