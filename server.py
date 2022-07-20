@@ -314,4 +314,4 @@ def newHand():
 
     return flask.redirect("/game/start")
 
-app.run(debug=True)
+app.run(debug=False)
